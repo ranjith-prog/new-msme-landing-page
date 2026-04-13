@@ -27,7 +27,7 @@ const STEPS = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section id="solutions" className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-4xl md:text-6xl font-display font-bold mb-6">Simple yet <span className="text-gradient">Powerful.</span></h2>

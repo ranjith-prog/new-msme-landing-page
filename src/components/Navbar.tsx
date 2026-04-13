@@ -19,18 +19,29 @@ export default function Navbar() {
           <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20">
             <Zap className="w-6 h-6 text-white fill-white" />
           </div>
-          <span className="text-xl font-display font-bold tracking-tight">NEXUS</span>
+          <span className="text-xl font-display font-bold tracking-tight uppercase">MSME tools</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          {["Products", "Solutions", "Developers", "Pricing"].map((item) => (
-            <Link
-              key={item}
-              to={`/#${item.toLowerCase()}`}
-              className="text-sm font-medium text-white/70 hover:text-white transition-colors"
+          {[
+            { name: "Products", id: "products" },
+            { name: "Solutions", id: "solutions" },
+            { name: "Developers", id: "developers" },
+            { name: "Pricing", id: "pricing" }
+          ].map((item) => (
+            <a
+              key={item.name}
+              href={`#${item.id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById(item.id);
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+                else window.location.href = `/#${item.id}`;
+              }}
+              className="text-sm font-medium text-white/70 hover:text-white transition-colors cursor-pointer"
             >
-              {item}
-            </Link>
+              {item.name}
+            </a>
           ))}
         </div>
 
@@ -79,15 +90,26 @@ export default function Navbar() {
           className="absolute top-24 left-6 right-6 p-6 glass-dark rounded-3xl md:hidden pointer-events-auto"
         >
           <div className="flex flex-col gap-6">
-            {["Products", "Solutions", "Developers", "Pricing"].map((item) => (
-              <Link
-                key={item}
-                to={`/#${item.toLowerCase()}`}
+            {[
+              { name: "Products", id: "products" },
+              { name: "Solutions", id: "solutions" },
+              { name: "Developers", id: "developers" },
+              { name: "Pricing", id: "pricing" }
+            ].map((item) => (
+              <a
+                key={item.name}
+                href={`#${item.id}`}
                 className="text-lg font-medium text-white/70 hover:text-white transition-colors"
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(false);
+                  const el = document.getElementById(item.id);
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                  else window.location.href = `/#${item.id}`;
+                }}
               >
-                {item}
-              </Link>
+                {item.name}
+              </a>
             ))}
             <hr className="border-white/10" />
             {isSignedIn ? (

@@ -29,7 +29,7 @@ export default function Footer() {
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600">
                 <Zap className="w-5 h-5 text-white fill-white" />
               </div>
-              <span className="text-xl font-display font-bold tracking-tight">NEXUS</span>
+              <span className="text-xl font-display font-bold tracking-tight">MSME tools</span>
             </div>
             <p className="text-white/40 max-w-xs mb-8 leading-relaxed">
               The intelligent infrastructure platform for modern engineering teams. 
@@ -64,7 +64,7 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-12 border-t border-white/5">
           <p className="text-sm text-white/20">
-            © 2026 Nexus Infrastructure Inc. All rights reserved.
+            © 2026 MSME tools Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">

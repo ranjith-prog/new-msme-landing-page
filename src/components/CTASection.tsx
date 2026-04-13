@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function CTASection() {
   return (
-    <section className="py-32 px-6">
+    <section id="pricing" className="py-32 px-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -23,7 +23,13 @@ export default function CTASection() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button className="px-10 py-5 bg-white text-black font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/20 flex items-center gap-2">
+            <button 
+              onClick={() => {
+                const el = document.getElementById('products');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-10 py-5 bg-white text-black font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/20 flex items-center gap-2"
+            >
               Get Started for Free <ArrowRight className="w-5 h-5" />
             </button>
             <button className="px-10 py-5 bg-black/20 text-white font-bold rounded-2xl hover:bg-black/30 active:scale-95 transition-all border border-white/10">

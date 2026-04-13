@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles, Shield, Zap, Globe } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <section className="relative min-h-[80vh] md:min-h-screen flex items-center justify-center pt-24 md:pt-20 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-500/20 rounded-full blur-[60px] animate-pulse-slow" />
@@ -29,8 +29,8 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          <h1 className="text-6xl md:text-8xl font-display font-bold leading-[1.1] tracking-tight mb-6">
-            Infrastructure for the <br />
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-bold leading-[1.1] tracking-tight mb-6 break-words">
+            Infrastructure for the <br className="hidden sm:block" />
             <span className="text-gradient">Intelligent Age.</span>
           </h1>
 
@@ -40,7 +40,13 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="group relative px-8 py-4 bg-white text-black font-bold rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95">
+            <button 
+              onClick={() => {
+                const el = document.getElementById('products');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="group relative px-8 py-4 bg-white text-black font-bold rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95"
+            >
               <span className="relative z-10 flex items-center gap-2">
                 Start Building Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>

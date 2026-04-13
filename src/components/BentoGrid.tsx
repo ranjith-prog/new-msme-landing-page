@@ -35,47 +35,42 @@ function BentoCard({ title, description, icon, className, gradient, productId }:
     </>
   );
 
-  const wrapperClass = cn(
-    "relative group overflow-hidden rounded-[2.5rem] border border-white/10 p-8 flex flex-col justify-between transition-all duration-500",
-    className
-  );
-
-  if (productId) {
-    return (
-      <motion.div whileHover={{ y: -5, scale: 1.01 }}>
-        <Link to={`/purchase/${productId}`} className={wrapperClass}>
-          {CardContent}
-        </Link>
-      </motion.div>
-    );
-  }
+  const cardBaseClass = "relative group overflow-hidden rounded-[2.5rem] border border-white/10 p-6 md:p-8 flex flex-col justify-between transition-all duration-500 h-full w-full";
 
   return (
-    <motion.div
-      whileHover={{ y: -5, scale: 1.01 }}
-      className={wrapperClass}
+    <motion.div 
+      whileHover={{ y: -5, scale: 1.01 }} 
+      className={cn("h-full", className)}
     >
-      {CardContent}
+      {productId ? (
+        <Link to={`/purchase/${productId}`} className={cardBaseClass}>
+          {CardContent}
+        </Link>
+      ) : (
+        <div className={cardBaseClass}>
+          {CardContent}
+        </div>
+      )}
     </motion.div>
   );
 }
 
 export default function BentoGrid() {
   return (
-    <section id="products" className="py-32 max-w-7xl mx-auto px-6">
-      <div className="mb-16">
-        <h2 className="text-4xl md:text-6xl font-display font-bold mb-6">
+    <section id="products" className="py-20 md:py-32 max-w-7xl mx-auto px-6">
+      <div className="mb-12 md:mb-16">
+        <h2 className="text-3xl md:text-6xl font-display font-bold mb-6">
           Engineered for <span className="text-gradient">Performance.</span>
         </h2>
-        <p className="text-xl text-white/50 max-w-2xl">
+        <p className="text-lg md:text-xl text-white/50 max-w-2xl">
           Everything you need to build, deploy, and scale your intelligent applications 
           without the infrastructure headache.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 md:auto-rows-[240px]">
         <BentoCard
-          className="md:col-span-4 md:row-span-2 min-h-[400px]"
+          className="md:col-span-8 md:row-span-2 min-h-[320px] md:min-h-0"
           title="Edge Intelligence"
           description="Deploy your models to 300+ edge locations globally. Reduce latency to single-digit milliseconds and provide a seamless experience for users anywhere on Earth."
           icon={<Globe className="w-6 h-6 text-indigo-400" />}
@@ -84,7 +79,7 @@ export default function BentoGrid() {
         />
 
         <BentoCard
-          className="md:col-span-2"
+          className="md:col-span-4 md:row-span-1 min-h-[200px] md:min-h-0"
           title="Zero-Trust Security"
           description="Enterprise-grade security baked into every layer of your stack."
           icon={<Lock className="w-6 h-6 text-purple-400" />}
@@ -93,25 +88,25 @@ export default function BentoGrid() {
         />
 
         <BentoCard
-          className="md:col-span-2"
+          className="md:col-span-4 md:row-span-1 min-h-[200px] md:min-h-0"
           title="Real-time Analytics"
-          description="Insight into every request, model execution, and edge event."
+          description="Insight into every request and model execution."
           icon={<BarChart3 className="w-6 h-6 text-emerald-400" />}
           gradient="from-emerald-500 to-teal-500"
         />
 
         <BentoCard
-          className="md:col-span-3"
+          className="md:col-span-6 md:row-span-1 min-h-[200px] md:min-h-0"
           title="Compute Engine"
-          description="High-performance GPU clusters optimized for inference and training."
+          description="High-performance GPU clusters optimized for inference."
           icon={<Cpu className="w-6 h-6 text-orange-400" />}
           gradient="from-orange-500 to-red-500"
         />
 
         <BentoCard
-          className="md:col-span-3"
+          className="md:col-span-6 md:row-span-1 min-h-[200px] md:min-h-0"
           title="Instant Scaling"
-          description="From zero to millions of requests in seconds without manual tuning."
+          description="From zero to millions of requests in seconds."
           icon={<Zap className="w-6 h-6 text-yellow-400" />}
           gradient="from-yellow-500 to-orange-500"
         />

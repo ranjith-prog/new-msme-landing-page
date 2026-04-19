@@ -11,6 +11,8 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Purchase from "./pages/Purchase";
+import AuthCallback from "./pages/AuthCallback";
+import Login from "./pages/Login";
 
 export default function App() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -59,6 +61,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/purchase/:productId" element={<Purchase />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
 

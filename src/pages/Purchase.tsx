@@ -1,6 +1,7 @@
-import { useUser, SignInButton } from "@clerk/clerk-react";
+import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../lib/supabase";
 import { motion } from "motion/react";
-import { useParams, Navigate, useNavigate } from "react-router-dom";
+import { useParams, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Shield, Zap, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useState, FormEvent } from "react";
 
@@ -21,8 +22,9 @@ const PRODUCTS = {
 
 export default function Purchase() {
   const { productId } = useParams();
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -30,7 +32,7 @@ export default function Purchase() {
 
   const handlePurchase = async (e: FormEvent) => {
     e.preventDefault();
-    if (!isSignedIn) return;
+    if (!user) return;
 
     setIsSubmitting(true);
     try {
@@ -40,8 +42,8 @@ export default function Purchase() {
         body: JSON.stringify({
           productId,
           userId: user.id,
-          email: user.primaryEmailAddress?.emailAddress,
-          name: user.fullName,
+          email: user.email,
+          name: user.user_metadata?.full_name || user.email?.split('@')[0],
         }),
       });
 
@@ -56,7 +58,7 @@ export default function Purchase() {
     }
   };
 
-  if (!isLoaded) return null;
+  if (loading) return null;
 
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto">
@@ -120,14 +122,15 @@ export default function Purchase() {
                 <h2 className="text-3xl font-display font-bold mb-2">Complete Purchase</h2>
                 <p className="text-white/40 mb-8">Confirm your details to proceed with the purchase intent.</p>
 
-                {!isSignedIn ? (
+                {!user ? (
                   <div className="p-10 text-center border-2 border-dashed border-white/10 rounded-3xl">
                     <p className="text-white/60 mb-6">Please sign in to complete your purchase.</p>
-                    <SignInButton mode="modal">
-                      <button className="w-full py-4 bg-white text-black font-bold rounded-2xl hover:scale-105 transition-all">
-                        Sign In to Continue
-                      </button>
-                    </SignInButton>
+                    <button 
+                      onClick={() => navigate("/login", { state: { from: location } })}
+                      className="w-full py-4 bg-white text-black font-bold rounded-2xl hover:scale-105 transition-all"
+                    >
+                      Sign In to Continue
+                    </button>
                   </div>
                 ) : (
                   <form onSubmit={handlePurchase} className="space-y-6">
@@ -136,7 +139,7 @@ export default function Purchase() {
                       <input 
                         type="text" 
                         readOnly 
-                        value={user.fullName || ""} 
+                        value={user.user_metadata?.full_name || user.email?.split('@')[0] || ""} 
                         className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/60 outline-none focus:border-indigo-500 transition-colors"
                       />
                     </div>
@@ -145,7 +148,7 @@ export default function Purchase() {
                       <input 
                         type="email" 
                         readOnly 
-                        value={user.primaryEmailAddress?.emailAddress || ""} 
+                        value={user.email || ""} 
                         className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/60 outline-none focus:border-indigo-500 transition-colors"
                       />
                     </div>

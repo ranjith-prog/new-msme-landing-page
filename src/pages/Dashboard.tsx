@@ -1,24 +1,27 @@
-import { useUser, useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../contexts/AuthContext";
 import { motion } from "motion/react";
 import { LayoutDashboard, Package, Settings, LogOut, Zap } from "lucide-react";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const { signOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const [intents, setIntents] = useState<any[]>([]);
 
   useEffect(() => {
-    if (isSignedIn && user) {
+    if (user) {
       fetch(`/api/my-intents/${user.id}`)
         .then(res => res.json())
         .then(data => setIntents(data));
     }
-  }, [isSignedIn, user]);
+  }, [user]);
 
-  if (!isLoaded) return null;
-  if (!isSignedIn) return <Navigate to="/" />;
+  if (loading) return null;
+  if (!user) return <Navigate to="/" />;
+
+  const fullName = user.user_metadata?.full_name || user.email?.split('@')[0] || "User";
+  const firstName = fullName.split(' ')[0];
+  const avatarUrl = user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${fullName}&background=6366f1&color=fff`;
 
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto">
@@ -27,10 +30,10 @@ export default function Dashboard() {
         <div className="lg:col-span-1 space-y-2">
           <div className="p-6 glass rounded-3xl mb-6">
             <div className="flex items-center gap-3 mb-4">
-              <img src={user.imageUrl} className="w-12 h-12 rounded-full border border-white/10" alt="Profile" />
+              <img src={avatarUrl} className="w-12 h-12 rounded-full border border-white/10" alt="Profile" />
               <div>
-                <p className="font-bold text-sm">{user.fullName}</p>
-                <p className="text-xs text-white/40">{user.primaryEmailAddress?.emailAddress}</p>
+                <p className="font-bold text-sm tracking-tight">{fullName}</p>
+                <p className="text-xs text-white/40 truncate max-w-[150px]">{user.email}</p>
               </div>
             </div>
             <div className="h-px bg-white/5 my-4" />
@@ -71,7 +74,7 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="p-10 glass rounded-[3rem]"
           >
-            <h1 className="text-4xl font-display font-bold mb-8">Welcome back, {user.firstName}</h1>
+            <h1 className="text-4xl font-display font-bold mb-8">Welcome back, {firstName}</h1>
             
             <div className="grid md:grid-cols-3 gap-6">
               {[

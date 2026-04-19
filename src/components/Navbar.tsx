@@ -1,12 +1,13 @@
 import { motion } from "motion/react";
-import { Menu, X, Zap, LayoutDashboard } from "lucide-react";
-import { useState } from "react";
-import { useUser, SignInButton, UserButton } from "@clerk/clerk-react";
+import { Menu, X, Zap, LayoutDashboard, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isSignedIn, isLoaded } = useUser();
+  const { user, loading, signOut } = useAuth();
 
   return (
     <motion.nav
@@ -46,30 +47,37 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          {!isLoaded ? (
+          {loading ? (
             <div className="w-24 h-8 bg-white/5 animate-pulse rounded-full" />
-          ) : isSignedIn ? (
-            <div className="flex items-center gap-4">
+          ) : user ? (
+            <div className="flex items-center gap-6">
               <Link 
                 to="/dashboard" 
                 className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors"
               >
                 <LayoutDashboard className="w-4 h-4" /> Dashboard
               </Link>
-              <UserButton afterSignOutUrl="/" />
+              <button 
+                onClick={() => signOut()}
+                className="flex items-center gap-2 text-sm font-medium text-red-400/80 hover:text-red-400 transition-colors"
+              >
+                <LogOut className="w-4 h-4" /> Logout
+              </button>
             </div>
           ) : (
             <>
-              <SignInButton mode="modal">
-                <button className="text-sm font-medium text-white/70 hover:text-white transition-colors">
-                  Sign In
-                </button>
-              </SignInButton>
-              <SignInButton mode="modal">
-                <button className="px-5 py-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 rounded-full border border-white/10 transition-all active:scale-95">
-                  Get Started
-                </button>
-              </SignInButton>
+              <Link 
+                to="/login"
+                className="text-sm font-medium text-white/70 hover:text-white transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link 
+                to="/login"
+                className="px-5 py-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 rounded-full border border-white/10 transition-all active:scale-95"
+              >
+                Get Started
+              </Link>
             </>
           )}
         </div>
@@ -112,23 +120,33 @@ export default function Navbar() {
               </a>
             ))}
             <hr className="border-white/10" />
-            {isSignedIn ? (
+            {user ? (
+              <div className="flex flex-col gap-4">
+                <Link 
+                  to="/dashboard" 
+                  className="w-full py-4 text-center text-lg font-semibold text-white bg-white/5 rounded-2xl"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Go to Dashboard
+                </Link>
+                <button 
+                  onClick={() => {
+                    signOut();
+                    setIsOpen(false);
+                  }}
+                  className="w-full py-4 text-center text-lg font-semibold text-red-500 bg-red-500/10 rounded-2xl"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
               <Link 
-                to="/dashboard" 
+                to="/login"
                 className="w-full py-4 text-center text-lg font-semibold text-white bg-indigo-600 rounded-2xl"
                 onClick={() => setIsOpen(false)}
               >
-                Go to Dashboard
+                Get Started
               </Link>
-            ) : (
-              <SignInButton mode="modal">
-                <button 
-                  className="w-full py-4 text-lg font-semibold text-white bg-indigo-600 rounded-2xl"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Get Started
-                </button>
-              </SignInButton>
             )}
           </div>
         </motion.div>

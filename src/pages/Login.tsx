@@ -24,15 +24,24 @@ export default function Login() {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
           }
         });
+        
         if (error) throw error;
-        setMessage("Check your email for the confirmation link!");
+
+        // If 'Confirm Email' is OFF in Supabase, we get a session immediately
+        if (data.session) {
+          navigate(from, { replace: true });
+        } else {
+          // If 'Confirm Email' is ON, we show a success message
+          setMessage("Account created successfully! You can sign in after confirming your email, or check your Supabase settings to disable email verification for instant access.");
+          setIsSignUp(false); // Switch to login mode so they can try signing in
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
